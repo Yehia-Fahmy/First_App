@@ -62,5 +62,29 @@ def show(img):
     plt.show()
 
 
+# function to convert the time into something readable
+def convert_time(seconds):
+    seconds = seconds % (24 * 3600)
+    hour = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+    return "%d:%02d:%02d" % (hour, minutes, seconds)
+
+
 # global variables
-CATEGORIES = ['cat', 'dog']
+CATAGORIES = ['cat', 'dog']
+
+# code to run
+
+start_time = t.time()
+print("Starting...")
+
+# prints the elapsed time for convenience
+total_time = t.time() - start_time
+total_time = round(total_time, 2)
+total_time = convert_time(total_time)
+
+# final message
+print(f"Finished in: {total_time}")
+print('Success!')
