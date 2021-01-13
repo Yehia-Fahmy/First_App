@@ -77,7 +77,7 @@ def convert_time(seconds):
 # global variables
 CATAGORIES = ['cats', 'dogs']
 DATA = []
-IMG_SIZE = 240  # images will be 120 by 120
+IMG_SIZE = 240  # images will be 240 by 240
 
 # code to run
 start_time = t.time()
