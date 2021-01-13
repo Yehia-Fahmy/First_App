@@ -42,18 +42,18 @@ def split_data(data):
     for features, label in data:        # splits the data
         X.append(features)
         y.append(label)
-    X = np.array(X).reshape(-1, 160, 160, 1)
+    X = np.array(X).reshape(-1, IMG_SIZE, IMG_SIZE)
     return X, y
 
 
 # dumps the pictures
 def save_data(X, y):
     print("Saving...")
-    pickle_out = open("X.pickle", "wb")
+    pickle_out = open("Images.pickle", "wb")
     pickle.dump(X, pickle_out)
     pickle_out.close()
 
-    pickle_out = open("y.pickle", "wb")
+    pickle_out = open("Labels.pickle", "wb")
     pickle.dump(y, pickle_out)
     pickle_out.close()
 
@@ -77,13 +77,16 @@ def convert_time(seconds):
 # global variables
 CATAGORIES = ['cats', 'dogs']
 DATA = []
-IMG_SIZE = 120 # images will be 120 by 120
+IMG_SIZE = 240  # images will be 120 by 120
 
 # code to run
-
 start_time = t.time()
 print("Starting...")
 load_data()
+DATA = shuffle_data(DATA)
+images, labels = split_data(DATA)
+save_data(images, labels)
+
 
 
 
