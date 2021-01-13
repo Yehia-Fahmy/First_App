@@ -3,6 +3,7 @@ from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, Conv2D,
 import pickle
 import numpy as np
 import time as t
+import matplotlib.pyplot as plt
 
 
 # function definitions
@@ -62,6 +63,12 @@ def convert_time(seconds):
     return "%d:%02d:%02d" % (hour, minutes, seconds)
 
 
+# quick function to show the image
+def show(img):
+    plt.imshow(img, cmap='gray')
+    plt.show()
+
+
 # Global Variables
 NUMLAYERS = 3
 NUMNODES = 124
@@ -71,6 +78,10 @@ BATCHSIZE = 32  # higher batch size will train faster
 # Code to run
 start_time = t.time()
 print("Starting...")
+
+images, labels = load_data()
+images, labels = reshape_data(images, labels)
+
 
 # prints the elapsed time for convenience
 total_time = t.time() - start_time
