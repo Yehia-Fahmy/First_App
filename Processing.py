@@ -11,6 +11,13 @@ import matplotlib.pyplot as plt
 # loads the pictures from the local machine
 def load_data():
     print("Loading data...")
+    err = 0  # variable to keep track of any missed images
+    for catagory in CATAGORIES:  # for every catagory
+        open(catagory)
+
+
+'''def load_data():
+    print("Loading data...")
     err = 0         # variable to keep track of any missed images
     for catagory in CATAGORIES:             # for every catagory
         path = os.path.join(DATADIR, catagory)
@@ -22,7 +29,7 @@ def load_data():
                 full_size_data.append([img_array, class_num])   # adds the data as a list
             except Exception as e:
                 err = err + 1       # counts the errors we have
-        print(len(full_size_data), "training examples (", err, "errors )")
+        print(len(full_size_data), "training examples (", err, "errors )")'''
 
 
 # shuffles the data
@@ -73,12 +80,15 @@ def convert_time(seconds):
 
 
 # global variables
-CATAGORIES = ['cat', 'dog']
+CATAGORIES = ['cats', 'dogs']
 
 # code to run
 
 start_time = t.time()
 print("Starting...")
+load_data()
+
+
 
 # prints the elapsed time for convenience
 total_time = t.time() - start_time
