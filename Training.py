@@ -30,7 +30,7 @@ def build_network(images):
 
     model = Sequential()
     for i in range(NUMLAYERS):      # adds a layer
-        model.add(Conv2D(NUMNODES, (3, 3), input_shape=images.shape[1:]))
+        model.add(Conv2D(NUMNODES, (3, 3), input_shape=images.shape))
         model.add(Activation("relu"))
         model.add(MaxPooling2D(pool_size=(2, 2)))
 
@@ -42,6 +42,8 @@ def build_network(images):
     model.compile(loss="binary_crossentropy",
                   optimizer="adam",
                   metrics=['accuracy'])     # compiles the model
+    model.summary()
+    print("Finished Compiling!")
 
     return model
 
@@ -70,9 +72,9 @@ def show(img):
 
 
 # Global Variables
-NUMLAYERS = 3
-NUMNODES = 124
-NUMEPOCHS = 3  # number of epochs we want to train for
+NUMLAYERS = 2
+NUMNODES = 64
+NUMEPOCHS = 50  # number of epochs we want to train for
 BATCHSIZE = 32  # higher batch size will train faster
 
 # Code to run
@@ -81,7 +83,7 @@ print("Starting...")
 
 images, labels = load_data()
 images, labels = reshape_data(images, labels)
-
+build_network(images)
 
 # prints the elapsed time for convenience
 total_time = t.time() - start_time
