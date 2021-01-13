@@ -76,7 +76,7 @@ def show(img):
 
 # Global Variables
 NUMLAYERS = 4
-NUMNODES = 64
+NUMNODES = 200
 NUMEPOCHS = 50  # number of epochs we want to train for
 BATCHSIZE = 40  # higher batch size will train faster
 IMG_SIZE = 240  # images will be 240 by 240
@@ -88,7 +88,22 @@ print("Starting...")
 images, labels = load_data()
 images, labels = reshape_data(images, labels)
 our_model = build_network(images)
-our_model_trained = train_model(our_model, images, labels)
+#our_model_trained = train_model(our_model, images, labels)
+accuracy = 0
+model_results = f'''
+NUMLAYERS = {NUMLAYERS}
+NUMNODES = {NUMNODES}
+NUMEPOCHS = {NUMEPOCHS}
+BATCHSIZE = {BATCHSIZE}
+IMG_SIZE = {IMG_SIZE}
+ACCURACY = {accuracy}%
+------------------------------------
+'''
+
+#print the results into results.txt
+file = open('results.txt', 'a')
+file.write(model_results)
+file.close()
 
 # prints the elapsed time for convenience
 total_time = t.time() - start_time
