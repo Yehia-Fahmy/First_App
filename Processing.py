@@ -12,24 +12,19 @@ import matplotlib.pyplot as plt
 def load_data():
     print("Loading data...")
     err = 0  # variable to keep track of any missed images
+    path = r'C:\Users\Yehia\OneDrive - University of Waterloo\Winter 2021 Co-op\Code\First_App'  # path to directory with the all pictures
     for catagory in CATAGORIES:  # for every catagory
-        open(catagory)
-
-
-'''def load_data():
-    print("Loading data...")
-    err = 0         # variable to keep track of any missed images
-    for catagory in CATAGORIES:             # for every catagory
-        path = os.path.join(DATADIR, catagory)
-        class_num = CATAGORIES.index(catagory)
-        for img in os.listdir(path):        # for every image
+        folder = os.path.join(path, catagory)   # joins folder with images
+        class_num = CATAGORIES.index(catagory)  # 0 for cat 1 for dog
+        for img in os.listdir(folder):  # for every image
             try:
-                img_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_GRAYSCALE)   # reads the image
-                img_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))     # confirms it is the correct size
-                full_size_data.append([img_array, class_num])   # adds the data as a list
+                img_array = cv2.imread(os.path.join(folder, img), cv2.IMREAD_GRAYSCALE)  # reads the image
+                img_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))  # confirms it is the correct size
+                DATA.append([img_array, class_num])  # adds the data as a list
             except Exception as e:
-                err = err + 1       # counts the errors we have
-        print(len(full_size_data), "training examples (", err, "errors )")'''
+                err = err + 1  # counts the errors we have
+        print(len(DATA), "training examples (", err, "errors )")
+
 
 
 # shuffles the data
@@ -81,6 +76,8 @@ def convert_time(seconds):
 
 # global variables
 CATAGORIES = ['cats', 'dogs']
+DATA = []
+IMG_SIZE = 120 # images will be 120 by 120
 
 # code to run
 
