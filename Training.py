@@ -40,14 +40,32 @@ def build_network(images):
     print("Building network...")
 
     model = Sequential()
-    for i in range(NUMLAYERS):      # adds a layer
+
+    model.add(Conv2D(NUMNODES, (3, 3), input_shape=images.shape[1:]))
+    model.add(Activation("relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    model.add(Conv2D(NUMNODES, (1, 1)))
+    model.add(Activation("relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    temp = int(NUMNODES/2)
+    model.add(Conv2D(temp, (3, 3)))
+    model.add(Activation("relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    model.add(Conv2D(temp, (1, 1)))
+    model.add(Activation("relu"))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    '''for i in range(NUMLAYERS):      # adds a layer
         model.add(Conv2D(NUMNODES, (3, 3), input_shape=images.shape[1:]))
         model.add(Activation("relu"))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(MaxPooling2D(pool_size=(2, 2)))'''
 
     model.add(Flatten())
-    model.add(Dense(1))
-    model.add(Activation("sigmoid"))        # the final layer is responsible for the prediction
+    model.add(Dense(2))
+    model.add(Activation("softmax"))        # the final layer is responsible for the prediction
 
     print("Compiling model...")
     model.compile(loss="binary_crossentropy",
@@ -84,8 +102,8 @@ def show(img):
 
 # Global Variables
 NUMLAYERS = 2
-NUMNODES = 300
-NUMEPOCHS = 20  # number of epochs we want to train for
+NUMNODES = 250
+NUMEPOCHS = 8  # number of epochs we want to train for
 BATCHSIZE = 15  # higher batch size will train faster
 IMG_SIZE = 120  # images will be 120 by 120
 
@@ -100,9 +118,14 @@ images, labels = reshape_data(images, labels)
 testing_images, testing_labels = reshape_data(testing_images, testing_labels)
 
 our_model = build_network(images)
+x = 10
+print(images[x].shape)
+img = np.array(images[x]).reshape(IMG_SIZE, IMG_SIZE)
+show(img)
+exit()
 our_model_trained = train_model(our_model, images, labels)
 
-loss, acc = our_model_trained.evaluate(testing_images, testing_labels, batch_size=16, use_multiprocessing='True')
+loss, acc = our_model_trained.evaluate(testing_images, testing_labels, batch_size=BATCHSIZE, use_multiprocessing='True')
 
 acc = round(acc * 100, 2)
 
