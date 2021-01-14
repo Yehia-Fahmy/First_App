@@ -83,10 +83,10 @@ def show(img):
 
 
 # Global Variables
-NUMLAYERS = 5
-NUMNODES = 200
-NUMEPOCHS = 10  # number of epochs we want to train for
-BATCHSIZE = 25  # higher batch size will train faster
+NUMLAYERS = 2
+NUMNODES = 300
+NUMEPOCHS = 20  # number of epochs we want to train for
+BATCHSIZE = 15  # higher batch size will train faster
 IMG_SIZE = 120  # images will be 120 by 120
 
 # Code to run
@@ -106,6 +106,11 @@ loss, acc = our_model_trained.evaluate(testing_images, testing_labels, batch_siz
 
 acc = round(acc * 100, 2)
 
+# prints the elapsed time for convenience
+total_time = t.time() - start_time
+total_time = round(total_time, 2)
+total_time = convert_time(total_time)
+
 model_results = f'''
 NUMLAYERS = {NUMLAYERS}
 NUMNODES = {NUMNODES}
@@ -113,18 +118,16 @@ NUMEPOCHS = {NUMEPOCHS}
 BATCHSIZE = {BATCHSIZE}
 IMG_SIZE = {IMG_SIZE}
 ACCURACY = {acc}%
+TIME = {total_time}
 ------------------------------------
 '''
+
 
 #print the results into results.txt
 file = open('results.txt', 'a')
 file.write(model_results)
 file.close()
 
-# prints the elapsed time for convenience
-total_time = t.time() - start_time
-total_time = round(total_time, 2)
-total_time = convert_time(total_time)
 
 # final message
 print(f"Finished in: {total_time}")
