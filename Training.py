@@ -62,8 +62,8 @@ def build_network(images):
 # function to train the model
 def train_model(model, images, labels):
     print("Training model...")
-    trained_model = model.fit(images, labels, epochs=NUMEPOCHS, validation_split=0.1, batch_size=BATCHSIZE)
-    return trained_model
+    model.fit(images, labels, epochs=NUMEPOCHS, validation_split=0.1, batch_size=BATCHSIZE)
+    return model
 
 
 # function to convert the time into something readable
@@ -83,7 +83,7 @@ def show(img):
 
 
 # Global Variables
-NUMLAYERS = 4
+NUMLAYERS = 5
 NUMNODES = 200
 NUMEPOCHS = 10  # number of epochs we want to train for
 BATCHSIZE = 25  # higher batch size will train faster
@@ -103,6 +103,8 @@ our_model = build_network(images)
 our_model_trained = train_model(our_model, images, labels)
 
 loss, acc = our_model_trained.evaluate(testing_images, testing_labels, batch_size=16, use_multiprocessing='True')
+
+acc = round(acc * 100, 2)
 
 model_results = f'''
 NUMLAYERS = {NUMLAYERS}
