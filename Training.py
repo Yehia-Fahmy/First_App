@@ -15,6 +15,14 @@ def load_data():
     return X, y
 
 
+# loads testing data
+def load_testing_data():
+    print("Loading data...")
+    X = pickle.load(open("Testing_Images.pickle", "rb"))
+    y = pickle.load(open("Testing_Labels.pickle", "rb"))
+    return X, y
+
+
 # reshapes the images to the right size
 def reshape_data(X, y):
     print("Reshaping data...")
@@ -77,26 +85,32 @@ def show(img):
 # Global Variables
 NUMLAYERS = 4
 NUMNODES = 200
-NUMEPOCHS = 50  # number of epochs we want to train for
-BATCHSIZE = 40  # higher batch size will train faster
-IMG_SIZE = 240  # images will be 240 by 240
+NUMEPOCHS = 10  # number of epochs we want to train for
+BATCHSIZE = 25  # higher batch size will train faster
+IMG_SIZE = 120  # images will be 120 by 120
 
 # Code to run
 start_time = t.time()
 print("Starting...")
 
 images, labels = load_data()
+testing_images, testing_labels = load_testing_data()
+
 images, labels = reshape_data(images, labels)
+testing_images, testing_labels = reshape_data(testing_images, testing_labels)
+
 our_model = build_network(images)
-#our_model_trained = train_model(our_model, images, labels)
-accuracy = 0
+our_model_trained = train_model(our_model, images, labels)
+
+loss, acc = our_model_trained.evaluate(testing_images, testing_labels, batch_size=16, use_multiprocessing='True')
+
 model_results = f'''
 NUMLAYERS = {NUMLAYERS}
 NUMNODES = {NUMNODES}
 NUMEPOCHS = {NUMEPOCHS}
 BATCHSIZE = {BATCHSIZE}
 IMG_SIZE = {IMG_SIZE}
-ACCURACY = {accuracy}%
+ACCURACY = {acc}%
 ------------------------------------
 '''
 
