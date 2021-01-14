@@ -118,14 +118,11 @@ images, labels = reshape_data(images, labels)
 testing_images, testing_labels = reshape_data(testing_images, testing_labels)
 
 our_model = build_network(images)
-x = 10
-print(images[x].shape)
-img = np.array(images[x]).reshape(IMG_SIZE, IMG_SIZE)
-show(img)
-exit()
-our_model_trained = train_model(our_model, images, labels)
 
-loss, acc = our_model_trained.evaluate(testing_images, testing_labels, batch_size=BATCHSIZE, use_multiprocessing='True')
+# training the model
+#our_model_trained = train_model(our_model, images, labels)
+loss, acc = 0, 0
+#loss, acc = our_model_trained.evaluate(testing_images, testing_labels, batch_size=BATCHSIZE, use_multiprocessing='True')
 
 acc = round(acc * 100, 2)
 
@@ -135,6 +132,7 @@ total_time = round(total_time, 2)
 total_time = convert_time(total_time)
 
 model_results = f'''
+------------------------------------
 NUMLAYERS = {NUMLAYERS}
 NUMNODES = {NUMNODES}
 NUMEPOCHS = {NUMEPOCHS}
@@ -142,13 +140,13 @@ BATCHSIZE = {BATCHSIZE}
 IMG_SIZE = {IMG_SIZE}
 ACCURACY = {acc}%
 TIME = {total_time}
-------------------------------------
 '''
 
 
 #print the results into results.txt
 file = open('results.txt', 'a')
 file.write(model_results)
+our_model.summary(print_fn=lambda x: file.write(x + '\n'))
 file.close()
 
 
