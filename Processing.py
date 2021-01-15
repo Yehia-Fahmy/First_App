@@ -26,6 +26,24 @@ def load_data():
         print(len(DATA), "training examples (", err, "errors )")
 
 
+# load testing data
+def load_testing_data():
+    print("Loading testing data...")
+    err = 0  # variable to keep track of any missed images
+    path = r'C:\Users\Yehia\OneDrive - University of Waterloo\Winter 2021 Co-op\Code\First_App'  # path to directory with the all pictures
+    for catagory in TESTING_CATAGORIES:  # for every catagory
+        folder = os.path.join(path, catagory)   # joins folder with images
+        class_num = TESTING_CATAGORIES.index(catagory)  # 0 for cat 1 for dog
+        for img in os.listdir(folder):  # for every image
+            try:
+                img_array = cv2.imread(os.path.join(folder, img), cv2.IMREAD_GRAYSCALE)  # reads the image
+                img_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))  # confirms it is the correct size
+                TESTING_DATA.append([img_array, class_num])  # adds the data as a list
+            except Exception as e:
+                err = err + 1  # counts the errors we have
+        print(len(DATA), "training examples (", err, "errors )")
+
+
 
 # shuffles the data
 def shuffle_data(data):
@@ -58,6 +76,18 @@ def save_data(X, y):
     pickle_out.close()
 
 
+# dumps the testing pictures
+def save_testing_data(X, y):
+    print("Saving...")
+    pickle_out = open("Testing_Images.pickle", "wb")
+    pickle.dump(X, pickle_out)
+    pickle_out.close()
+
+    pickle_out = open("Testing_Labels.pickle", "wb")
+    pickle.dump(y, pickle_out)
+    pickle_out.close()
+
+
 # quick function to show the image
 def show(img):
     plt.imshow(img, cmap='gray')
@@ -76,18 +106,25 @@ def convert_time(seconds):
 
 # global variables
 CATAGORIES = ['cats', 'dogs']
+TESTING_CATAGORIES = ['test_cats', 'test_dogs']
 DATA = []
-IMG_SIZE = 240  # images will be 120 by 120
+TESTING_DATA = []
+IMG_SIZE = 120  # images will be 120 by 120
 
 # code to run
 start_time = t.time()
 print("Starting...")
 load_data()
+load_testing_data()
+
 DATA = shuffle_data(DATA)
+TESTING_DATA = shuffle_data(TESTING_DATA)
+
 images, labels = split_data(DATA)
+testing_images, testing_labels = split_data(TESTING_DATA)
+
 save_data(images, labels)
-
-
+save_testing_data(testing_images, testing_labels)
 
 
 # prints the elapsed time for convenience
