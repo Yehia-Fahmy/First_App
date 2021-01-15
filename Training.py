@@ -4,6 +4,7 @@ import pickle
 import numpy as np
 import time as t
 import matplotlib.pyplot as plt
+from keras.utils import to_categorical
 
 
 # function definitions
@@ -75,6 +76,35 @@ def build_network(images):
     return model
 
 
+# builds the neural network used in the paper
+def build_Mark_4_40(X):
+    print("Building Mark 4.40...")
+    model = Sequential()
+    # First Layer
+    model.add(
+        Conv2D(512, kernel_size=(3, 3), activation='relu', input_shape=(X.shape[1:]), padding='same', strides=(1, 1)))
+    # Second Layer
+    model.add(Conv2D(256, kernel_size=(3, 3), activation='relu', padding='same', strides=(1, 1)))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    # Third Layer
+    model.add(Conv2D(128, kernel_size=(3, 3), activation='relu', padding='same', strides=(1, 1)))
+    # Fourth Layer
+    model.add(Conv2D(128, kernel_size=(3, 3), activation='relu', padding='same', strides=(1, 1)))
+    # Fifth Layer
+    model.add(Conv2D(256, kernel_size=(3, 3), activation='relu', padding='same', strides=(1, 1)))
+    # Sixth Layer
+    model.add(Conv2D(512, kernel_size=(3, 3), activation='relu', padding='same', strides=(1, 1)))
+    # Final Layer
+    model.add(Flatten())
+    model.add(Dense(2, activation='softmax'))
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='adamax',
+                  metrics=['accuracy'])
+    # All Done
+    model.summary()
+    return model
+
+
 # function to train the model
 def train_model(model, images, labels):
     print("Training model...")
@@ -101,8 +131,8 @@ def show(img):
 # Global Variables
 NUMLAYERS = 2
 NUMNODES = 250
-NUMEPOCHS = 8  # number of epochs we want to train for
-BATCHSIZE = 15  # higher batch size will train faster
+NUMEPOCHS = 6  # number of epochs we want to train for
+BATCHSIZE = 5  # higher batch size will train faster
 IMG_SIZE = 120  # images will be 120 by 120
 
 # Code to run
@@ -115,12 +145,14 @@ testing_images, testing_labels = load_testing_data()
 images, labels = reshape_data(images, labels)
 testing_images, testing_labels = reshape_data(testing_images, testing_labels)
 
-our_model = build_network(images)
+our_model = build_Mark_4_40(images)
 
 # training the model
-#our_model_trained = train_model(our_model, images, labels)
+labels = to_categorical(labels)
+testing_labels = to_categorical(testing_labels)
+our_model_trained = train_model(our_model, images, labels)
 loss, acc = 0, 0
-#loss, acc = our_model_trained.evaluate(testing_images, testing_labels, batch_size=BATCHSIZE, use_multiprocessing='True')
+loss, acc = our_model_trained.evaluate(testing_images, testing_labels, batch_size=BATCHSIZE, use_multiprocessing='True')
 
 acc = round(acc * 100, 2)
 
@@ -130,7 +162,7 @@ total_time = round(total_time, 2)
 total_time = convert_time(total_time)
 
 model_results = f'''
-------------------------------------
+#################################################################
 NUMLAYERS = {NUMLAYERS}
 NUMNODES = {NUMNODES}
 NUMEPOCHS = {NUMEPOCHS}
