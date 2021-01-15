@@ -48,6 +48,16 @@ def show(img):
     plt.show()
 
 
+# reshapes the images to the right size
+def reshape_data(X, y):
+    print(f"Reshaping data...")
+    X = np.array(X)     # ensuring that lists are instead arrays
+    training_data = X / 255
+    training_data = np.array(training_data).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+    y = np.array(y)
+    return training_data, y
+
+
 '''# function to prepare the training and testing batches
 def prepare_batches(p_cats, p_dogs):
     labels = ['cat', 'dog']
@@ -65,6 +75,9 @@ training_labels = load_data('Labels.pickle')
 testing_images = load_data('Testing_Images.pickle')
 testing_labels = load_data('Testing_Labels.pickle')
 
+# reshape the data
+training_images, training_labels = reshape_data(training_images, training_labels)
+testing_images, testing_labels = reshape_data(testing_images, testing_labels)
 
 # prints the elapsed time for convenience
 total_time = t.time() - start_time
