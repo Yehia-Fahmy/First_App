@@ -109,7 +109,7 @@ CATAGORIES = ['cats', 'dogs']
 TESTING_CATAGORIES = ['test_cats', 'test_dogs']
 DATA = []
 TESTING_DATA = []
-IMG_SIZE = 120  # images will be 120 by 120
+IMG_SIZE = 240  # images will be 120 by 120
 
 # code to run
 start_time = t.time()
