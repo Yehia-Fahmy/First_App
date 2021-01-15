@@ -1,5 +1,7 @@
 import numpy as np
 import keras
+from keras import Model as M
+from keras import backend as K
 from keras.models import Sequential
 from keras.layers import Activation
 from keras.layers.core import Dense, Flatten
@@ -9,6 +11,8 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.layers.normalization import BatchNormalization
 from keras.layers.convolutional import *
 from matplotlib import pyplot as plt
+from sklearn.metrics import confusion_matrix
+import itertools
 import time as t
 import pickle
 from keras.utils import to_categorical
@@ -58,6 +62,20 @@ def reshape_data(X, y):
     return training_data, y
 
 
+# function to build the network
+def build_network(input):
+    mobile = keras.applications.mobilenet.MobileNet()
+    x = mobile.layers[-6].output
+    predictions = Dense(2, activation='softmax')(x)
+    model = M(inputs=mobile.input, outputs=predictions)
+    # makes only the last 5 layers trainable
+    for layer in model.layers[:-5]:
+        layer.trainable = False
+    model.compile(Adam(lr=.0001), loss='categorical_crossentropy', metrics=['accuracy'])
+    model.summary()
+    return model
+
+
 '''# function to prepare the training and testing batches
 def prepare_batches(p_cats, p_dogs):
     labels = ['cat', 'dog']
@@ -78,6 +96,8 @@ testing_labels = load_data('Testing_Labels.pickle')
 # reshape the data
 training_images, training_labels = reshape_data(training_images, training_labels)
 testing_images, testing_labels = reshape_data(testing_images, testing_labels)
+
+build_network(training_images)
 
 # prints the elapsed time for convenience
 total_time = t.time() - start_time
