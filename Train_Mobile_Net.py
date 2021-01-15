@@ -26,6 +26,8 @@ p_test_dogs = 'test_dogs'
 
 # global variables
 IMG_SIZE = 240
+NUM_EPOCHS = 1
+BATCH_SIZE = 10
 
 # function definitions
 
@@ -63,7 +65,7 @@ def reshape_data(X, y):
 
 
 # function to build the network
-def build_network(input):
+def build_network():
     mobile = keras.applications.mobilenet.MobileNet()
     x = mobile.layers[-6].output
     predictions = Dense(2, activation='softmax')(x)
@@ -73,6 +75,13 @@ def build_network(input):
         layer.trainable = False
     model.compile(Adam(lr=.0001), loss='categorical_crossentropy', metrics=['accuracy'])
     model.summary()
+    return model
+
+
+# function to train the model
+def train_model(model, imgs, labels):
+    print("Training model...")
+    model.fit(imgs, labels, epochs=NUM_EPOCHS, validation_split=0.1, batch_size=BATCH_SIZE)
     return model
 
 
@@ -97,7 +106,8 @@ testing_labels = load_data('Testing_Labels.pickle')
 training_images, training_labels = reshape_data(training_images, training_labels)
 testing_images, testing_labels = reshape_data(testing_images, testing_labels)
 
-build_network(training_images)
+our_model = build_network()
+trained_model = train_model(our_model, training_images, training_labels)
 
 # prints the elapsed time for convenience
 total_time = t.time() - start_time
