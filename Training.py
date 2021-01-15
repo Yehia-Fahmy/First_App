@@ -29,8 +29,6 @@ def reshape_data(X, y):
     X = np.array(X)     # ensuring that lists are instead arrays
     training_data = X / 255
     training_data = np.array(training_data).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
-    print(f"X.shape: {X.shape}")
-    print(f"training_data.shape: {training_data.shape}")
     y = np.array(y)
     return training_data, y
 
