@@ -12,3 +12,10 @@ from matplotlib import pyplot as plt
 import time as t
 import pickle
 from keras.utils import to_categorical
+
+# paths to images
+p_train_cats = 'cats'
+p_train_dogs = 'dogs'
+p_test_cats = 'test_cats'
+p_test_dogs = 'test_dogs'
+
