@@ -35,6 +35,19 @@ def convert_time(seconds):
     return "%d:%02d:%02d" % (hour, minutes, seconds)
 
 
+# function to load .pickle files
+def load_data(file_name):
+    print(f'Loading {file_name}...')
+    file = pickle.load(open(file_name, 'rb'))
+    return file
+
+
+# quick function to show the image
+def show(img):
+    plt.imshow(img, cmap='gray')
+    plt.show()
+
+
 '''# function to prepare the training and testing batches
 def prepare_batches(p_cats, p_dogs):
     labels = ['cat', 'dog']
@@ -45,6 +58,12 @@ def prepare_batches(p_cats, p_dogs):
 # Code to run
 start_time = t.time()
 print("Starting...")
+
+# load in data
+training_images = load_data('Images.pickle')
+training_labels = load_data('Labels.pickle')
+testing_images = load_data('Testing_Images.pickle')
+testing_labels = load_data('Testing_Labels.pickle')
 
 
 # prints the elapsed time for convenience
