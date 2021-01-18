@@ -4,6 +4,7 @@ from keras import Model as M
 from keras.layers.core import Dense, Flatten
 from keras.optimizers import Adam
 import cv2
+import os
 from keras.metrics import categorical_crossentropy
 from keras.preprocessing.image import ImageDataGenerator
 from keras.layers.normalization import BatchNormalization
@@ -24,8 +25,25 @@ p_test_dogs = 'test_dogs'
 IMG_SIZE = 224
 NUM_EPOCHS = 1
 BATCH_SIZE = 10
+KERAS_MODEL_NAME = 'Full_Size_Model.h5'
+TF_LITE_MODEL_NAME = 'TF_Lite_Model.tflite'
 
 # function definitions
+
+# gets size of file
+def get_file_size(file_path):
+    size = os.path.getsize(file_path)
+    return size
+
+# converts bytes for readability
+def convert_bytes(size, unit=None):
+    if unit == "KB":
+        return print('File size: ' + str(round(size / 1024, 3)) + ' Kilobytes')
+    elif unit == "MB":
+        return print('File size: ' + str(round(size / (1024 * 1024), 3)) + ' Megabytes')
+    else:
+        return print('File size: ' + str(size) + ' bytes')
+
 
 # function to convert the time into something readable
 def convert_time(seconds):
@@ -116,8 +134,12 @@ testing_labels = load_data('Testing_Labels.pickle')
 training_images, training_labels = reshape_data(training_images, training_labels)
 testing_images, testing_labels = reshape_data(testing_images, testing_labels)
 
+# build and train the model
 our_model = build_network()
 trained_model = train_model(our_model, training_images, training_labels)
+
+# save the model
+trained_model.save(KERAS_MODEL_NAME)
 
 # evaluate the model
 loss, acc = trained_model.evaluate(testing_images, testing_labels, batch_size=BATCH_SIZE, use_multiprocessing='True')
