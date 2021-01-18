@@ -88,6 +88,20 @@ def train_model(model, imgs, labels):
     return model
 
 
+# print the results to the txt file
+def print_results():
+    model_results = f'''
+    #################################################################
+    IMG_SIZE = {IMG_SIZE}
+    ACCURACY = {acc}%
+    TIME = {total_time}
+    '''
+    file = open('results.txt', 'a')
+    file.write(model_results)
+    our_model.summary(print_fn=lambda x: file.write(x + '\n'))
+    file.close()
+
+
 # Code to run
 start_time = t.time()
 print("Starting...")
@@ -105,10 +119,17 @@ testing_images, testing_labels = reshape_data(testing_images, testing_labels)
 our_model = build_network()
 trained_model = train_model(our_model, training_images, training_labels)
 
+# evaluate the model
+loss, acc = trained_model.evaluate(testing_images, testing_labels, batch_size=BATCH_SIZE, use_multiprocessing='True')
+acc = round(acc * 100, 2)
+
 # prints the elapsed time for convenience
 total_time = t.time() - start_time
 total_time = round(total_time, 2)
 total_time = convert_time(total_time)
+
+# prints the results
+print_results()
 
 # final message
 print(f"Finished in: {total_time}")
