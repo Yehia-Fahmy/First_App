@@ -1,9 +1,6 @@
 import numpy as np
 import keras
 from keras import Model as M
-from keras import backend as K
-from keras.models import Sequential
-from keras.layers import Activation
 from keras.layers.core import Dense, Flatten
 from keras.optimizers import Adam
 from keras.metrics import categorical_crossentropy
@@ -11,8 +8,6 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.layers.normalization import BatchNormalization
 from keras.layers.convolutional import *
 from matplotlib import pyplot as plt
-from sklearn.metrics import confusion_matrix
-import itertools
 import time as t
 import pickle
 from keras.utils import to_categorical
@@ -59,7 +54,7 @@ def reshape_data(X, y):
     print(f"Reshaping data...")
     X = np.array(X)     # ensuring that lists are instead arrays
     training_data = X / 255
-    training_data = np.array(training_data).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+    training_data = np.array(training_data).reshape(-1, IMG_SIZE, IMG_SIZE, 3)
     y = np.array(y)
     return training_data, y
 
@@ -94,6 +89,9 @@ training_images = load_data('Images.pickle')
 training_labels = load_data('Labels.pickle')
 testing_images = load_data('Testing_Images.pickle')
 testing_labels = load_data('Testing_Labels.pickle')
+
+show(training_images[0])
+exit()
 
 # reshape the data
 training_images, training_labels = reshape_data(training_images, training_labels)
