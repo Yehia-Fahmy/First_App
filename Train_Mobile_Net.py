@@ -1,4 +1,5 @@
 import numpy as np
+import tensorflow as tf
 import keras
 from keras import Model as M
 from keras.layers.core import Dense, Flatten
@@ -23,7 +24,7 @@ p_test_dogs = 'test_dogs'
 
 # global variables
 IMG_SIZE = 224
-NUM_EPOCHS = 1
+NUM_EPOCHS = 10
 BATCH_SIZE = 10
 KERAS_MODEL_NAME = 'Full_Size_Model.h5'
 TF_LITE_MODEL_NAME = 'TF_Lite_Model.tflite'
@@ -146,9 +147,11 @@ trained_model.save(KERAS_MODEL_NAME)
 full_bytes = convert_bytes(get_file_size(KERAS_MODEL_NAME), "MB")
 
 # evaluate the model
-loss, acc = trained_model.evaluate(testing_images, testing_labels,
-                                   epochs=10, batch_size=BATCH_SIZE, use_multiprocessing='True')
+loss, acc = trained_model.evaluate(testing_images, testing_labels, batch_size=BATCH_SIZE, use_multiprocessing='True')
 acc = round(acc * 100, 2)
+
+# convert the model
+tf_lite_converter = tf.lite.TFLiteConverter.from_keras_model(trained_model)
 
 # prints the elapsed time for convenience
 total_time = t.time() - start_time
