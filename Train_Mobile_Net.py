@@ -62,6 +62,7 @@ def reshape_data(X, y):
         triple_channel.append(img3)
     triple_channel = np.array(triple_channel)
     y = np.array(y)
+    y = to_categorical(y)
     print(f"X.shape(): {triple_channel.shape}, y.shape(): {y.shape}")
     return triple_channel, y
 
