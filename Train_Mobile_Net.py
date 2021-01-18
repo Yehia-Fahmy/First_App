@@ -30,19 +30,21 @@ TF_LITE_MODEL_NAME = 'TF_Lite_Model.tflite'
 
 # function definitions
 
+
 # gets size of file
 def get_file_size(file_path):
     size = os.path.getsize(file_path)
     return size
 
+
 # converts bytes for readability
 def convert_bytes(size, unit=None):
     if unit == "KB":
-        return print('File size: ' + str(round(size / 1024, 3)) + ' Kilobytes')
+        return 'File size: ' + str(round(size / 1024, 3)) + ' Kilobytes'
     elif unit == "MB":
-        return print('File size: ' + str(round(size / (1024 * 1024), 3)) + ' Megabytes')
+        return 'File size: ' + str(round(size / (1024 * 1024), 3)) + ' Megabytes'
     else:
-        return print('File size: ' + str(size) + ' bytes')
+        return 'File size: ' + str(size) + ' bytes'
 
 
 # function to convert the time into something readable
@@ -113,6 +115,7 @@ def print_results():
     IMG_SIZE = {IMG_SIZE}
     ACCURACY = {acc}%
     TIME = {total_time}
+    {full_bytes}
     '''
     file = open('results.txt', 'a')
     file.write(model_results)
@@ -140,6 +143,7 @@ trained_model = train_model(our_model, training_images, training_labels)
 
 # save the model
 trained_model.save(KERAS_MODEL_NAME)
+full_bytes = convert_bytes(get_file_size(KERAS_MODEL_NAME), "MB")
 
 # evaluate the model
 loss, acc = trained_model.evaluate(testing_images, testing_labels, batch_size=BATCH_SIZE, use_multiprocessing='True')
