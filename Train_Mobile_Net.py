@@ -1,11 +1,12 @@
 import numpy as np
 import tensorflow as tf
-import keras
-from keras import Model as M
-from keras.layers.core import Dense, Flatten
-from keras.optimizers import Adam
+from tensorflow import keras
+from tensorflow.keras import Model as M
+from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.optimizers import Adam
 import cv2
 import os
+from tensorflow.keras.models import Sequential
 from keras.metrics import categorical_crossentropy
 from keras.preprocessing.image import ImageDataGenerator
 from keras.layers.normalization import BatchNormalization
@@ -116,12 +117,20 @@ def print_results():
     IMG_SIZE = {IMG_SIZE}
     ACCURACY = {acc}%
     TIME = {total_time}
-    {full_bytes}
+    Full {full_bytes}
+    Lite {lite_bytes}
     '''
     file = open('results.txt', 'a')
     file.write(model_results)
     our_model.summary(print_fn=lambda x: file.write(x + '\n'))
     file.close()
+
+
+# function to convert from tf model to tf.lite for mobile application
+def convert_model(model):
+    tf_lite_converter = tf.lite.TFLiteConverter.from_keras_model(model)
+    new_model = tf_lite_converter.convert()
+    return new_model
 
 
 # Code to run
@@ -151,7 +160,11 @@ loss, acc = trained_model.evaluate(testing_images, testing_labels, batch_size=BA
 acc = round(acc * 100, 2)
 
 # convert the model
-tf_lite_converter = tf.lite.TFLiteConverter.from_keras_model(trained_model)
+tf_lite_model = convert_model(trained_model)
+
+# save the model
+open(TF_LITE_MODEL_NAME, "wb").write(tf_lite_model)
+lite_bytes = convert_bytes(get_file_size(TF_LITE_MODEL_NAME), "MB")
 
 # prints the elapsed time for convenience
 total_time = t.time() - start_time
