@@ -3,6 +3,7 @@ import keras
 from keras import Model as M
 from keras.layers.core import Dense, Flatten
 from keras.optimizers import Adam
+import cv2
 from keras.metrics import categorical_crossentropy
 from keras.preprocessing.image import ImageDataGenerator
 from keras.layers.normalization import BatchNormalization
@@ -20,7 +21,7 @@ p_test_dogs = 'test_dogs'
 
 
 # global variables
-IMG_SIZE = 240
+IMG_SIZE = 224
 NUM_EPOCHS = 1
 BATCH_SIZE = 10
 
@@ -53,17 +54,23 @@ def show(img):
 def reshape_data(X, y):
     print(f"Reshaping data...")
     X = np.array(X)     # ensuring that lists are instead arrays
-    training_data = X / 255
-    training_data = np.array(training_data).reshape(-1, IMG_SIZE, IMG_SIZE, 3)
+    X = X / 255
+    single_channel = np.array(X).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
+    triple_channel = []
+    for img1 in single_channel:
+        img3 = cv2.merge((img1, img1, img1))
+        triple_channel.append(img3)
+    triple_channel = np.array(triple_channel)
     y = np.array(y)
-    return training_data, y
+    print(f"X.shape(): {triple_channel.shape}, y.shape(): {y.shape}")
+    return triple_channel, y
 
 
 # function to build the network
 def build_network():
     mobile = keras.applications.mobilenet.MobileNet()
-    x = mobile.layers[-6].output
-    predictions = Dense(2, activation='softmax')(x)
+    x2 = mobile.layers[-6].output
+    predictions = Dense(2, activation='softmax')(x2)
     model = M(inputs=mobile.input, outputs=predictions)
     # makes only the last 5 layers trainable
     for layer in model.layers[:-5]:
@@ -89,9 +96,6 @@ training_images = load_data('Images.pickle')
 training_labels = load_data('Labels.pickle')
 testing_images = load_data('Testing_Images.pickle')
 testing_labels = load_data('Testing_Labels.pickle')
-
-show(training_images[0])
-exit()
 
 # reshape the data
 training_images, training_labels = reshape_data(training_images, training_labels)
