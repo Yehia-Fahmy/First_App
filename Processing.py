@@ -20,7 +20,7 @@ def load_data():
         for img in os.listdir(folder):  # for every image
             if counter < 100:
                 try:
-                    img_array = cv2.imread(os.path.join(folder, img), cv2.IMREAD_COLOR)  # reads the image
+                    img_array = cv2.imread(os.path.join(folder, img), cv2.IMREAD_GRAYSCALE)  # reads the image
                     img_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))  # confirms it is the correct size
                     DATA.append([img_array, class_num])  # adds the data as a list
                     counter = counter + 1
@@ -46,7 +46,7 @@ def load_testing_data():
                 TESTING_DATA.append([img_array, class_num])  # adds the data as a list
             except Exception as e:
                 err = err + 1  # counts the errors we have
-        print(len(DATA), "training examples (", err, "errors )")
+        print(len(TESTING_DATA), "testing examples (", err, "errors )")
 
 
 
@@ -114,7 +114,7 @@ CATAGORIES = ['cats', 'dogs']
 TESTING_CATAGORIES = ['test_cats', 'test_dogs']
 DATA = []
 TESTING_DATA = []
-IMG_SIZE = 240  # images will be 120 by 120
+IMG_SIZE = 224
 
 # code to run
 start_time = t.time()
@@ -130,7 +130,6 @@ testing_images, testing_labels = split_data(TESTING_DATA)
 
 save_data(images, labels)
 save_testing_data(testing_images, testing_labels)
-
 
 # prints the elapsed time for convenience
 total_time = t.time() - start_time
