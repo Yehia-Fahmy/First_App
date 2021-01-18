@@ -2,4 +2,6 @@
 /Labels.pickle
 /Testing_Labels.pickle
 /Testing_Images.pickle
-results.txt
+/results.txt
+/Full_Size_Model.h5
+/TF_Lite_Model.tflite
