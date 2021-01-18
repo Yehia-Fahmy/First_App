@@ -85,13 +85,6 @@ def train_model(model, imgs, labels):
     return model
 
 
-'''# function to prepare the training and testing batches
-def prepare_batches(p_cats, p_dogs):
-    labels = ['cat', 'dog']
-    for label in labels:
-        batch = ImageDataGenerator(preprocessing_function=keras.applications.mobilenet.preprocess_input)\
-            .flow_from_directory(p_cats, target_size=(IMG_SIZE, IMG_SIZE), batch_size=10)'''
-
 # Code to run
 start_time = t.time()
 print("Starting...")
