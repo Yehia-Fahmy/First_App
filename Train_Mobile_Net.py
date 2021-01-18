@@ -146,7 +146,8 @@ trained_model.save(KERAS_MODEL_NAME)
 full_bytes = convert_bytes(get_file_size(KERAS_MODEL_NAME), "MB")
 
 # evaluate the model
-loss, acc = trained_model.evaluate(testing_images, testing_labels, batch_size=BATCH_SIZE, use_multiprocessing='True')
+loss, acc = trained_model.evaluate(testing_images, testing_labels,
+                                   epochs=10, batch_size=BATCH_SIZE, use_multiprocessing='True')
 acc = round(acc * 100, 2)
 
 # prints the elapsed time for convenience
