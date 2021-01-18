@@ -16,13 +16,18 @@ def load_data():
     for catagory in CATAGORIES:  # for every catagory
         folder = os.path.join(path, catagory)   # joins folder with images
         class_num = CATAGORIES.index(catagory)  # 0 for cat 1 for dog
+        counter = 0
         for img in os.listdir(folder):  # for every image
-            try:
-                img_array = cv2.imread(os.path.join(folder, img), cv2.IMREAD_COLOR)  # reads the image
-                img_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))  # confirms it is the correct size
-                DATA.append([img_array, class_num])  # adds the data as a list
-            except Exception as e:
-                err = err + 1  # counts the errors we have
+            if counter < 100:
+                try:
+                    img_array = cv2.imread(os.path.join(folder, img), cv2.IMREAD_COLOR)  # reads the image
+                    img_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))  # confirms it is the correct size
+                    DATA.append([img_array, class_num])  # adds the data as a list
+                    counter = counter + 1
+                except Exception as e:
+                    err = err + 1  # counts the errors we have
+            else:
+                break
         print(len(DATA), "training examples (", err, "errors )")
 
 
